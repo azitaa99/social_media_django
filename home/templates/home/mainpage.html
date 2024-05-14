@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<p class="text-center fs-1">wellcom to my page </p>
+<form action="", method="get">
+    {{form}}
+    <input type="submit", value="find">
+</form>
+{% if request.user.is_authenticated %}
+<h5>Hello {{ request.user.username }}</h5><br>
+{% endif %}
+{% for post in posts %}
+<a href="{% url 'home:post_detail' post.id %}" , class="btn btn-secondary btn-sm">{{post.user.username}}--{{post.slug}}-----{{post.updated|timesince}}</a><br><br>
+ {% endfor %}
+{% endblock %}
+

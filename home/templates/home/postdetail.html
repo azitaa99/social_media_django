@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'accounts:profile_detail'  post.user.id %}">{{post.user.username}}</a>
+<h2>{{ post.body }}</h2>
+{% if request.user.is_authenticated %}
+<a href="{% url 'home:post_like' post.id %}", class="{% if  not can_like %} disabled {% endif %} btn btn-primary ">like-{{post.pvote.count}}</a>
+{% endif %}
+{%  if request.user.id == post.user.id %}
+    <a href="{% url 'home:post_update' post.id %}", class="btn btn-info">update post</a>
+    <a href="{% url 'home:delete_post'  post.id %}", class="btn btn-info">delete</a>
+{% endif %}
+
+
+
+
+ 
+
+{% for comment in comments %}
+    <div class="card-body bg-dark text-white m-2 p-2">
+        <p >{{comment.body}}</p>
+        <p>{{comment.user}}--{{comment.created|timesince}}</p><br>
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'home:reply_page' post.id  comment.id %}", method="post">
+            {% csrf_token %}
+                {{replyform.as_p}}
+                <input type="submit", value="send">
+            </form>
+        {% endif %}
+        {% with replies=comment.recom.all %}
+            {% for reply in replies %}
+                <p>{{reply.body}}.....{{reply.user}}</p>
+            {% endfor %}
+        {% endwith %}
+    </div>
+        {% empty %}
+            <p>no comment yet</p>
+{% endfor %}
+    
+
+
+
+{% if request.user.is_authenticated %}
+    <form action="", method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit", value="send">
+    </form>
+{% else %}
+    <p>only loggedin user can send comment</p>
+{% endif %}
+
+
+
+{% endblock %}

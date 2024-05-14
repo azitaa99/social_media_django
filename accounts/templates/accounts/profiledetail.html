@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <p class="text-center  fs-1 ">{{ user.username|upper }}</p>
+   {% if request.user.id == user.id %}
+    <a href="", class="btn btn-info">Edit Profile</a>
+    <a href="{% url 'accounts:logout_page' %} ", class="btn btn-info">Log Out</a>
+    <a href="{% url 'home:create_post' %}", class="btn btn-info">create new post</a><br>
+    {% endif %}
+    {% if request.user.id != user.id  and not is_followed  %}
+    <a href="{% url 'accounts:following_page' user.id %}", class="btn btn-secondary">follow</a>
+    {% elif request.user.id != user.id and is_followed   %}
+    <a href="{% url 'accounts:unfollowing_page' user.id %}", class="btn btn-secondary">unfollow</a>
+    {% endif %}
+
+
+
+
+
+    {% for post in posts %}
+    <a href="{% url 'home:post_detail' post.id %}" , class="btn btn-secondary btn-sm">{{post.slug}}---{{post.created}}</a><br>
+    {% endfor%}
+    
+
+{% endblock %}
